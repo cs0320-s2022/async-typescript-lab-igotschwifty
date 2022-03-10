@@ -65,7 +65,7 @@ public final class Main {
     // TODO: create a call to Spark.post to make a POST request to a URL which
     // will handle getting matchmaking results for the input
     // It should only take in the route and a new ResultsHandler
-    Spark.post("/results", new ResultsHandler());
+    Spark.post("http://localhost:4567/results", new ResultsHandler());
     Spark.options("/*", (request, response) -> {
       String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
       if (accessControlRequestHeaders != null) {
@@ -85,7 +85,7 @@ public final class Main {
     // Allows requests from any domain (i.e., any URL). This makes development
     // easier, but it’s not a good idea for deployment.
     Spark.before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
-//    Spark.post("/results", new ResultsHandler());
+    Spark.post("/results", new ResultsHandler());
   }
 
   /**
@@ -117,20 +117,15 @@ public final class Main {
       // and rising
       // for generating matches
       JSONObject json;
-      JSONObject obj;
-      String sun;
-      String moon;
-      String rising;
-      try {
-        json = new JSONObject();
-        obj = json.getJSONObject(req.body());
-        sun = obj.getString("sun");
-        moon = obj.getString("moon");
-        rising = obj.getString("rising");
-      } catch (JSONException e) {
-        System.out.println(e.getMessage());
-        return null;
-      }
+      JsonObject obj;
+      String sun = null;
+      String moon = null;
+      String rising = null;
+
+      obj = JsonParser.parseString(req.body()).getAsJsonObject();
+      sun = obj.get("sun").getAsString();
+      moon = obj.get("moon").getAsString();
+      rising = obj.get("rising").getAsString();
 
       // TODO: use the MatchMaker.makeMatches method to get matches
       List<String> matches = MatchMaker.makeMatches(sun, moon, rising);

@@ -22,7 +22,11 @@ rising.addEventListener("change", postAndUpdate);
 // TODO: empty the suggestionList (you want new suggestions each time someone types something new)
 //  HINT: use .innerHTML
 function postAndUpdate() {
+    console.log("sugList before call:");
+    console.log(sugList.textContent);
     sugList.innerHTML = "";
+    console.log("sugList after call:");
+    console.log(sugList.textContent);
     // TODO: add a type annotation to make this of type MatchesRequestData
     let postParameters = {
         sun: sun.value, moon: moon.value, rising: rising.value
@@ -35,7 +39,7 @@ function postAndUpdate() {
     //  HINT: check out the POST REQUESTS section of the lab and of the front-end guide.
     //  Make sure you add "Access-Control-Allow-Origin":"*" to your headers.
     //  Remember to add a type annotation for the response data using the Matches type you defined above!
-    fetch('http://localhost:4567/results', {
+    fetch("http://localhost:4567/results", {
         method: 'POST',
         body: JSON.stringify(postParameters),
         headers: {
@@ -57,6 +61,10 @@ function updateSuggestions(matches) {
     for (let i = 0; i < matches.length; i++) {
         sugList.innerHTML += `<li tabindex=\"0\"> ${matches[i]} </li>`;
     }
+    console.log("Matches generated:");
+    console.log(matches);
+    console.log("After updating sugList:");
+    console.log(sugList.textContent);
 }
 // TODO: create an event listener to the document (document.addEventListener) that detects "keyup".
 //  When a certain key of your choice is clicked, reset the values of sun, moon, and rising to your own
